@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE akuntansi IS
     PROCEDURE tambah_gaji(emp_no in EMPLOYEES.EMPLOYEE_ID%TYPE, percentage_inc in NUMBER);
-    PROCEDURE hitung_pajak(emp_no in EMPLOYEES.EMPLOYEE_ID%TYPE);
+    FUNCTION hitung_pajak(emp_no in EMPLOYEES.EMPLOYEE_ID%TYPE);
 END akuntansi;
 
 CREATE OR REPLACE PACKAGE BODY akuntansi IS
@@ -25,8 +25,8 @@ CREATE OR REPLACE PACKAGE BODY akuntansi IS
               DBMS_OUTPUT.PUT_LINE('ERROR: ' || emp_no || ' is an invalid emp_no.');
     END tambah_gaji;
 
-    PROCEDURE hitung_pajak(emp_no in EMPLOYEES.EMPLOYEE_ID%type)
-    IS
+    FUNCTION hitung_pajak(emp_no in EMPLOYEES.EMPLOYEE_ID%type)
+    RETURN NUMBER IS
         salary NUMBER := 0;
         tax NUMBER := 0;
     BEGIN
@@ -39,6 +39,6 @@ CREATE OR REPLACE PACKAGE BODY akuntansi IS
         from EMPLOYEES
         where EMPLOYEE_ID = emp_no;
 
-        DBMS_OUTPUT.PUT_LINE(tax / 100 * salary);
+        RETURN (tax / 100 * salary);
     END hitung_pajak;
 END akuntansi;
